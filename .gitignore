@@ -27,3 +27,4 @@ requirements-dev.lock
 requirements.lock
 outputs
 .mypy_cache
+.venv

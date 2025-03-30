@@ -893,6 +893,8 @@ class PySRRegressor(MultiOutputMixin, RegressorMixin, BaseEstimator):
         extra_jax_mappings: dict[Callable, str] | None = None,
         denoise: bool = False,
         select_k_features: int | None = None,
+        bin_op_weight: list[float] | None = None, # My Addition
+        un_op_weight: list[float] | None = None, # My Addition
         **kwargs,
     ):
         # Hyperparameters
@@ -1003,6 +1005,8 @@ class PySRRegressor(MultiOutputMixin, RegressorMixin, BaseEstimator):
         # Pre-modelling transformation
         self.denoise = denoise
         self.select_k_features = select_k_features
+        self.bin_op_weight = bin_op_weight
+        self.un_op_weight = un_op_weight
 
         # Once all valid parameters have been assigned handle the
         # deprecated kwargs
@@ -2040,6 +2044,8 @@ class PySRRegressor(MultiOutputMixin, RegressorMixin, BaseEstimator):
             seed=seed,
             deterministic=self.deterministic,
             define_helper_functions=False,
+            bin_op_weight=jl_array(self.bin_op_weight, dtype=jl.Float64), # My Addition
+            un_op_weight=jl_array(self.un_op_weight, dtype=jl.Float64), # My Addition
         )
 
         self.julia_options_stream_ = jl_serialize(options)
